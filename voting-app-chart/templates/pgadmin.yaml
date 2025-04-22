@@ -1,0 +1,72 @@
+{{- if .Values.pgadmin.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgadmin
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: admin
+spec:
+  selector:
+    app: pgadmin
+  ports:
+    - port: {{ .Values.pgadmin.service.port }}
+      targetPort: {{ .Values.pgadmin.service.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+        {{- include "voting-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: admin
+    spec:
+      containers:
+        - name: pgadmin
+          image: "{{ .Values.pgadmin.image.repository }}:{{ .Values.pgadmin.image.tag }}"
+          imagePullPolicy: {{ .Values.pgadmin.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.pgadmin.service.port }}
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: {{ .Values.pgadmin.credentials.email | quote }}
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: {{ .Values.pgadmin.credentials.password | quote }}
+          volumeMounts:
+            - name: pgadmin-data
+              mountPath: /var/lib/pgadmin
+      volumes:
+        - name: pgadmin-data
+          persistentVolumeClaim:
+            claimName: pgadmin-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pgadmin-pvc
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: admin
+spec:
+  accessModes: ["ReadWriteOnce"]
+  {{- if .Values.pgadmin.persistence.storageClass }}
+  storageClassName: {{ .Values.pgadmin.persistence.storageClass }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.pgadmin.persistence.size }}
+{{- end }}  

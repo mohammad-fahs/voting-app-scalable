@@ -1,0 +1,29 @@
+kubectl port-forward svc/my-grafana 3000:80
+
+kubectl port-forward svc/vmcluster-victoria-metrics-cluster-vmselect 8481:8481
+kubectl port-forward deployment/vmagent-victoria-metrics-agent 8429:8429
+http://localhost:8429/targets
+
+
+
+ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml
+
+helm install monitoring-stack prometheus-community/kube-prometheus-stack --namespace monitoring
+
+# HELP voters  
+# TYPE voters gauge
+voters 10004.0
+# HELP voters_not_voted  
+# TYPE voters_not_voted gauge
+voters_not_voted 10002.0
+# HELP voters_voted  
+# TYPE voters_voted gauge
+voters_voted 2.0
+# HELP votes_per_option  
+# TYPE votes_per_option gauge
+votes_per_option{option="Optio C"} 0.0
+votes_per_option{option="Option A"} 2.0
+votes_per_option{option="Option B"} 0.0
+# HELP voting_options  
+# TYPE voting_options gauge
+voting_options 3.0

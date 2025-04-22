@@ -1,0 +1,79 @@
+{{- if .Values.haproxy.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-config
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+data:
+  haproxy.cfg: |
+    global
+      daemon
+      maxconn {{ .Values.haproxy.config.maxconn }}
+
+    defaults
+      mode http
+      timeout connect {{ .Values.haproxy.config.timeoutConnect }}
+      timeout client {{ .Values.haproxy.config.timeoutClient }}
+      timeout server {{ .Values.haproxy.config.timeoutServer }}
+
+    frontend http-in
+      bind *:{{ .Values.haproxy.service.port }}
+      default_backend servers
+
+    backend servers
+      server app1 voting-app.{{ include "voting-app.namespaceName" . }}.svc.cluster.local:{{ .Values.votingApp.service.httpPort }} check
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: haproxy
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: haproxy
+  template:
+    metadata:
+      labels:
+        app: haproxy
+        {{- include "voting-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: proxy
+    spec:
+      containers:
+        - name: haproxy
+          image: "{{ .Values.haproxy.image.repository }}:{{ .Values.haproxy.image.tag }}"
+          imagePullPolicy: {{ .Values.haproxy.image.pullPolicy }}
+          volumeMounts:
+            - name: haproxy-config-volume
+              mountPath: /usr/local/etc/haproxy
+          ports:
+            - containerPort: {{ .Values.haproxy.service.port }}
+      volumes:
+        - name: haproxy-config-volume
+          configMap:
+            name: haproxy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: haproxy-service
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+spec:
+  selector:
+    app: haproxy
+  ports:
+    - protocol: TCP
+      port: {{ .Values.haproxy.service.port }}
+      targetPort: {{ .Values.haproxy.service.port }}
+{{- end }}

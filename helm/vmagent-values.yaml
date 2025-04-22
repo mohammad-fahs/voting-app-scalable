@@ -1,0 +1,1 @@
+helm install vma vm/victoria-metrics-agent -f values.yaml -n NAMESPACE

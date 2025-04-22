@@ -1,0 +1,63 @@
+{{- if .Values.votingApp.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: voting-app
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: application
+spec:
+  selector:
+    app: voting-app
+  ports:
+    - name: http
+      port: {{ .Values.votingApp.service.httpPort }}
+      targetPort: {{ .Values.votingApp.service.httpPort }}
+    - name: metrics
+      port: {{ .Values.votingApp.service.metricsPort }}
+      targetPort: {{ .Values.votingApp.service.metricsPort }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-app
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: application
+spec:
+  replicas: {{ .Values.votingApp.replicas }}
+  selector:
+    matchLabels:
+      app: voting-app
+  template:
+    metadata:
+      labels:
+        app: voting-app
+        {{- include "voting-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: application
+      annotations:
+        {{- if .Values.votingApp.prometheus.scrape }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.votingApp.prometheus.port }}"
+        prometheus.io/path: "{{ .Values.votingApp.prometheus.path }}"
+        {{- end }}
+    spec:
+      containers:
+        - name: voting-app
+          image: "{{ .Values.votingApp.image.repository }}:{{ .Values.votingApp.image.tag }}"
+          imagePullPolicy: {{ .Values.votingApp.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.votingApp.service.httpPort }}
+            - containerPort: {{ .Values.votingApp.service.metricsPort }}
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: {{ .Values.votingApp.env.datasourceUrl | quote }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ .Values.votingApp.env.datasourceUsername | quote }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: {{ .Values.votingApp.env.datasourcePassword | quote }}
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: {{ .Values.votingApp.env.hibernateDdlAuto | quote }}
+{{- end }}

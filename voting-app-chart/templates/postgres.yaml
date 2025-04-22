@@ -1,0 +1,64 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.postgres.service.name }}
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  ports:
+    - port: {{ .Values.postgres.service.port }}
+      targetPort: {{ .Values.postgres.service.port }}
+  clusterIP: None  # Required for stable network ID
+  selector:
+    app: postgres
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: {{ include "voting-app.namespaceName" . }}
+  labels:
+    {{- include "voting-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: {{ .Values.postgres.service.name }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+        {{- include "voting-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: database
+    spec:
+      containers:
+        - name: postgres
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.postgres.service.port }}
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.credentials.username | quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgres.credentials.password | quote }}
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: pgdata
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        {{- if .Values.postgres.persistence.storageClass }}
+        storageClassName: {{ .Values.postgres.persistence.storageClass }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.postgres.persistence.size }}
+{{- end }}

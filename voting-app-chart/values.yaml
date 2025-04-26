@@ -49,7 +49,7 @@ votingApp:
     repository: voting-app
     tag: latest
     pullPolicy: IfNotPresent
-  replicas: 3
+  replicas: 1
   service:
     httpPort: 8080
     metricsPort: 9321
@@ -62,7 +62,15 @@ votingApp:
     datasourceUsername: "user-name"
     datasourcePassword: "strong-password"
     hibernateDdlAuto: "update"
-
+  hpa:
+    enabled: true
+  resources:
+    requests:
+      cpu: "800m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "800Mi"
 # HAProxy configuration
 haproxy:
   enabled: true
@@ -84,6 +92,10 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "500"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "8m"
   hosts:
     - host: voting.local
       paths:

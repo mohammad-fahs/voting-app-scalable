@@ -60,4 +60,11 @@ spec:
               value: {{ .Values.votingApp.env.datasourcePassword | quote }}
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: {{ .Values.votingApp.env.hibernateDdlAuto | quote }}
+          resources:
+            requests:
+              cpu: {{ .Values.votingApp.resources.requests.cpu | quote }}
+              memory: {{ .Values.votingApp.resources.requests.memory | quote }}
+            limits:
+              cpu: {{ .Values.votingApp.resources.limits.cpu | quote }}
+              memory: {{ .Values.votingApp.resources.limits.memory | quote }}
 {{- end }}

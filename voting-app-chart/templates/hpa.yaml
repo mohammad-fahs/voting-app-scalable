@@ -12,20 +12,20 @@ spec:
     kind: Deployment
     name: voting-app
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 3
   metrics:
     - type: Resource
       resource:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 65
+          averageUtilization: 70
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 60
+          averageUtilization: 75
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 0 

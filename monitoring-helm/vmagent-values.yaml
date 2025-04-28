@@ -1,0 +1,2 @@
+remoteWrite:
+ - url: http://vm-insert:8480/insert/0/prometheus

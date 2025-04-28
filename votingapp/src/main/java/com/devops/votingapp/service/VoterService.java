@@ -4,6 +4,8 @@ import com.devops.votingapp.model.Voter;
 import com.devops.votingapp.repository.VoterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +29,10 @@ public class VoterService {
 
     public List<Voter> getAllVoters() {
         return voterRepo.findAll();
+    }
+
+    public Page<Voter> getAllVoters(Pageable pageable) {
+        return voterRepo.findAll(pageable);
     }
 
     public Optional<Voter> getVoter(String id) {

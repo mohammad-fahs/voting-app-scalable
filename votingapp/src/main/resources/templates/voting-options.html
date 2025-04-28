@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Voting Options</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Available Voting Options</h1>
+
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Option Name</th>
+            <th scope="col">Option ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="option, iterStat : ${options}">
+            <th scope="row" th:text="${iterStat.count}">1</th>
+            <td th:text="${option.name}">Option Name</td>
+            <td th:text="${option.id}">Option ID</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

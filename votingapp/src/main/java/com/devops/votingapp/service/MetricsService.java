@@ -67,7 +67,7 @@ public class MetricsService {
             });
 
             atomicCount.set(count); // update the value
-            log.info("votes option {} count {}", option, count);
+            //log.info("votes option {} count {}", option, count);
         });
     }
 
@@ -84,12 +84,12 @@ public class MetricsService {
         totalVoters = voterRepository.count();
         votedVoters = voterRepository.countByHasVotedTrue();
         notVotedVoters = voterRepository.countByHasVotedFalse();
-        log.info("Voter metrics updated: total={}, voted={}, not voted={}", totalVoters, votedVoters, notVotedVoters);
+        //log.info("Voter metrics updated: total={}, voted={}, not voted={}", totalVoters, votedVoters, notVotedVoters);
     }
 
     public void updateVotingOptionsMetric() {
         totalVotingOptions = votingOptionRepository.count();
-        log.info("Voting options metrics updated: total={}", totalVotingOptions);
+        //log.info("Voting options metrics updated: total={}", totalVotingOptions);
     }
 
 }

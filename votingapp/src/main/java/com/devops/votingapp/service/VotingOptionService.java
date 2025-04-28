@@ -14,8 +14,8 @@ public class VotingOptionService {
     private final VotingOptionRepository optionRepo;
 
 
-    public void initializeOptions(List<VotingOption> options) {
-        optionRepo.saveAll(options);
+    public List<VotingOption> initializeOptions(List<VotingOption> options) {
+        return optionRepo.saveAll(options);
     }
 
     public List<VotingOption> getAllOptions() {

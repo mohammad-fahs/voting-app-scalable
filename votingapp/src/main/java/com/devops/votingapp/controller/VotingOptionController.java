@@ -16,9 +16,9 @@ public class VotingOptionController {
     private final VotingOptionService service;
 
     @PostMapping("/init")
-    public ResponseEntity<Void> init(@RequestBody List<VotingOption> options) {
-        service.initializeOptions(options);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<VotingOption>> init(@RequestBody List<VotingOption> options) {
+        List<VotingOption> savedOptions = service.initializeOptions(options);
+        return ResponseEntity.ok(savedOptions);
     }
 
     @GetMapping

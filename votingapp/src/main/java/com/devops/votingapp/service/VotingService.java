@@ -37,7 +37,7 @@ public class VotingService {
 
         if (voter.isHasVoted()) {
             metrics.incrementVoteFailure();
-            throw new RuntimeException("Voter has already voted");
+            throw new RuntimeException("Voter has already voted "+voter.getId() + " " + voter.getName() +" "+voter.getNationalId());
         }
 
         VotingOption option = optionRepo.findById(optionId)

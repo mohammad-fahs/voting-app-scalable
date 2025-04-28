@@ -10,7 +10,7 @@ option_ids = []
 voter_index = 0
 
 # Load voters once before starting
-for i in range(1, 2):  # you have voters_1.json to voters_6.json
+for i in range(1, 7):  # you have voters_1.json to voters_6.json
     with open(f"voters_{i}.json", "r", encoding="utf-8") as f:
         voters.extend(json.load(f))
 

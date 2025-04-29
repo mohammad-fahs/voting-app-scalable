@@ -638,17 +638,21 @@ spec:
 
 ### Validation
 
-![image.png](image.png)
+![image](https://github.com/user-attachments/assets/fc375654-d6d5-4947-a0b2-dd53761e4bc3)
 
-![image.png](image%201.png)
 
-![image.png](image%202.png)
+![image 1](https://github.com/user-attachments/assets/a73de32f-0234-4814-84e9-70652016335b)
+
+
+![image 2](https://github.com/user-attachments/assets/6857a671-6013-40c7-ad51-80220c9d4c83)
+
 
 # HA Proxy
 
 **HAProxy** (High Availability Proxy) is a fast and reliable open-source solution offering high availability, load balancing, and proxying for TCP and HTTP-based applications. In Kubernetes, HAProxy can be deployed as a pod (typically via a Deployment) to manage incoming traffic and route it to services or pods in the cluster.
 
-![image.png](image%203.png)
+![image 3](https://github.com/user-attachments/assets/f5f8031a-d059-4aa2-b4b4-76072666559a)
+
 
 ### Why Is HAProxy Used in Kubernetes?
 
@@ -798,7 +802,8 @@ spec:
 
 As you can se below the helm chart started with one pod for voting-app and since the load started increasing automatically a new pod was created then after while a third pod was created 
 
-![Screenshot 2025-04-28 112504.png](Screenshot_2025-04-28_112504.png)
+![Screenshot_2025-04-28_112504](https://github.com/user-attachments/assets/3cb044bb-3eda-4da9-abf4-22539bfed781)
+
 
 # Helm Chart
 
@@ -1079,13 +1084,15 @@ Your `MetricsService` class defines and exposes **custom domain-specific metrics
  **Kubernetes monitoring with `VictoriaMetrics` Cluster use the below resource** 
 [https://docs.victoriametrics.com/guides/k8s-monitoring-via-vm-cluster/](https://docs.victoriametrics.com/guides/k8s-monitoring-via-vm-cluster/)
 
-![image.png](image%204.png)
+![image 4](https://github.com/user-attachments/assets/09665864-3e25-4757-8a5d-7b7b29d75f78)
+
 
 # Load Test
 
 ## Import Voting options
 
-![image.png](image%205.png)
+![image 5](https://github.com/user-attachments/assets/c422ac16-98b4-4899-afc6-bd427abb3864)
+
 
 ## Generate Voters
 
@@ -1124,9 +1131,11 @@ print("✅ JSON files created successfully in the current directory!")
 
 ```
 
-![image.png](image%206.png)
+![image 6](https://github.com/user-attachments/assets/53dfed92-6b3c-46c0-932f-fc385fa437f6)
 
-![image.png](image%207.png)
+
+![image 7](https://github.com/user-attachments/assets/f540cda1-dc46-496a-8614-b0deb75ef57e)
+
 
 ### Run Load Test
 
@@ -1211,6 +1220,7 @@ class VotingUser(HttpUser):
 locust -f locustfile.py
 ```
 
-![image.png](image%208.png)
+![image 8](https://github.com/user-attachments/assets/26a42f58-157a-41e7-aac4-2acf2e06dbc7)
 
-![response_times_(ms)_1745962733.096.png](response_times_(ms)_1745962733.096.png)
+
+![response_times_(ms)_1745962733 096](https://github.com/user-attachments/assets/892e34c1-28e5-4e88-99af-1c3fc89343d3)

@@ -1224,3 +1224,6 @@ locust -f locustfile.py
 
 
 ![response_times_(ms)_1745962733 096](https://github.com/user-attachments/assets/892e34c1-28e5-4e88-99af-1c3fc89343d3)
+
+![Screenshot 2025-04-28 112504](https://github.com/user-attachments/assets/1c4f3b9f-e03a-4791-b9d1-f514568b1ecc)
+
